@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رسالة سرية</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: none;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover { background: #4338ca; }
+        #result {
+            margin-top: 15px;
+            word-break: break-all;
+            font-size: 0.9rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="mainCard">
+        <h2>💌 اترك رسالة</h2>
+        <textarea id="msgInput" placeholder="اكتب رسالتك هنا..."></textarea>
+        <button onclick="makeLink()">إنشاء الرابط</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function makeLink() {
+            const text = document.getElementById('msgInput').value.trim();
+            if (!text) {
+                alert("الرجاء كتابة رسالة أولاً!");
+                return;
+            }
+            const base = window.location.href.split('?')[0];
+            const finalLink = ${base}?text=${encodeURIComponent(text)};
+            
+            document.getElementById('result').innerHTML = `
+                <p>تمสร้าง الرابط بنجاح:</p>
+                <input type="text" value="${finalLink}" readonly style="width:100%; padding:5px; text-align:center;" onclick="this.select();">
+                <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">خذ هذا الرابط وحطه في أي موقع مجاني لتوليد الـ QR Code</p>
+            `;
+        }
+
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const msg = params.get('text');
+            if (msg) {
+                document.getElementById('mainCard').innerHTML = `
+                    <h2>💌 وصلت لك رسالة</h2>
+                    <p style="font-size: 1.2rem; color: #555; line-height: 1.6;">${decodeURIComponent(msg)}</p>
+                `;
+            }
+        }
+    </script>
+
+</body>
+</html>
